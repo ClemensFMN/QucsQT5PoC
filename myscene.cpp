@@ -20,7 +20,7 @@ void MyScene::exportScene() {
 
     //qDebug() << wires.at(0)->getNode1()->getName() << wires.at(0)->getNode2()->getName();
 
-    qDebug() << wires.at(0)->getNode1();
+    //qDebug() << wires.at(0)->getNode1();
 
     /*
     for(int i=0; i<components.count(); i++) {
@@ -61,12 +61,13 @@ void MyScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {
                 startComponent = n;
                 startPoint = n->mapFromScene(mouseEvent->scenePos());
                 QList<QPointF> nnodes = n->getNodes();
+                qreal dist = 500.0;
                 for(int i=0; i<nnodes.length(); i++) {
                     QPointF temp = nnodes.at(i);
-                    qreal dist = (temp - startPoint).manhattanLength();
-                    if(dist < 20) {
+                    qreal temp_dist = (temp - startPoint).manhattanLength();
+                    if(temp_dist < dist) {
                         startPoint = nnodes.at(i);
-                        break;
+                        dist = temp_dist;
                     }
                 }
                 //qDebug() << "startPoint" << startPoint;
@@ -107,12 +108,13 @@ void MyScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent) {
                 Component *endComponent = n;
                 QPointF endPoint = n->mapFromScene(mouseEvent->scenePos());
                 QList<QPointF> nnodes = n->getNodes();
+                qreal dist = 500.0;
                 for(int i=0; i<nnodes.length(); i++) {
                     QPointF temp = nnodes.at(i);
-                    qreal dist = (temp - endPoint).manhattanLength();
-                    if(dist < 20) {
+                    qreal temp_dist = (temp - endPoint).manhattanLength();
+                    if(temp_dist < dist) {
                         endPoint = nnodes.at(i);
-                        break;
+                        dist = temp_dist;
                     }
                 }
                 //qDebug() << "startindex" << startComponent->getNodes().indexOf(startPoint);

@@ -10,10 +10,10 @@ Component::Component(QString name) {
     _nodes.append(p2);
 
     //TODO: Init _wires
-     qDebug() << "init _wires";
+     //qDebug() << "init _wires";
      //_wires[0] = QList<Wire*>();
      //_wires[1] = QList<Wire*>();
-     qDebug() << "finished init _wires";
+     //qDebug() << "finished init _wires";
 
     setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemSendsGeometryChanges);
 }
@@ -29,6 +29,8 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     }
 
     painter->drawText(boundingRect(), _name);
+    painter->setPen(QPen(Qt::green, 2, Qt::SolidLine));
+    painter->drawRect(boundingRect());
 }
 
 void Component::addWire(int node, Wire *e) {
