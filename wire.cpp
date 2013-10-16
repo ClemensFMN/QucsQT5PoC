@@ -32,11 +32,13 @@ QRectF Wire::boundingRect() const {
 
 void Wire::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
 
+    /*
     qDebug() << "wire paint" << Component1->getName() << Component2->getName();
     qDebug() << Component1->getNodes() << Component2->getNodes();
     qDebug() << node1 << "..." << node2;
     qDebug() << Component1->getNodes().at(node1);
     qDebug() << Component2->getNodes().at(node2);
+    */
 
     QLineF line(mapFromItem(Component1, Component1->getNodes().at(node1)), mapFromItem(Component2, Component2->getNodes().at(node2)));
     painter->setPen(QPen(Qt::blue, 2, Qt::SolidLine));
@@ -56,12 +58,18 @@ void Wire::adjust() {
     update();
 }
 
-Component* Wire::getNode1() {
+Component* Wire::getComponent1() {
     return Component1;
 }
 
-Component* Wire::getNode2() {
+Component* Wire::getComponent2() {
     return Component2;
 }
 
+int Wire::getNode1() {
+    return node1;
+}
 
+int Wire::getNode2() {
+    return node2;
+}

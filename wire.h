@@ -14,8 +14,10 @@ public:
     void adjust();
     QString getName();
     void setName(QString s);
-    Component* getNode1();
-    Component* getNode2();
+    Component* getComponent1();
+    Component* getComponent2();
+    int getNode1();
+    int getNode2();
 
 private:
     Component *Component1, *Component2;

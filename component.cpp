@@ -9,6 +9,12 @@ Component::Component(QString name) {
     QPointF p2(20, 0);
     _nodes.append(p2);
 
+    //TODO: Init _wires
+     qDebug() << "init _wires";
+     //_wires[0] = QList<Wire*>();
+     //_wires[1] = QList<Wire*>();
+     qDebug() << "finished init _wires";
+
     setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemSendsGeometryChanges);
 }
 
@@ -31,7 +37,7 @@ void Component::addWire(int node, Wire *e) {
     } else {
         _wires2.append(e);
     }
-    _wires[node].append(e);
+    //_wires[node].append(e);
 }
 
 QString Component::getName() {

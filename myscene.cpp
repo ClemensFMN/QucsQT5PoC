@@ -4,7 +4,7 @@ MyScene::MyScene(QObject *parent) : QGraphicsScene(parent) {
     line = 0;
     mode = 0;
     numComponents = 0;
-    //QList<Component*> components();
+
     this->setItemIndexMethod(QGraphicsScene::NoIndex);
 }
 
@@ -18,9 +18,9 @@ void MyScene::setDrawingItem(QString itemtype) {
 
 void MyScene::exportScene() {
 
-    for(int i=0; i<wires.length(); i++) {
+    //qDebug() << wires.at(0)->getNode1()->getName() << wires.at(0)->getNode2()->getName();
 
-    }
+    qDebug() << wires.at(0)->getNode1();
 
     /*
     for(int i=0; i<components.count(); i++) {
@@ -115,15 +115,12 @@ void MyScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent) {
                         break;
                     }
                 }
-                qDebug() << "startindex" << startComponent->getNodes().indexOf(startPoint);
-                qDebug() << "endindex" << endComponent->getNodes().indexOf(endPoint);
+                //qDebug() << "startindex" << startComponent->getNodes().indexOf(startPoint);
+                //qDebug() << "endindex" << endComponent->getNodes().indexOf(endPoint);
                 Wire *e = new Wire(startComponent, startComponent->getNodes().indexOf(startPoint), endComponent, endComponent->getNodes().indexOf(endPoint));
                 wires.append(e);
-                qDebug() << "1";
                 addItem(e);
-                qDebug() << "2";
                 removeItem(line);
-                qDebug() << "3";
             }
         }
     }
