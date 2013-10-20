@@ -5,7 +5,7 @@ MyScene::MyScene(QObject *parent) : QGraphicsScene(parent) {
     mode = 0;
     numComponents = 0;
 
-    this->setItemIndexMethod(QGraphicsScene::NoIndex);
+    //this->setItemIndexMethod(QGraphicsScene::NoIndex);
 }
 
 void MyScene::setMode(int mode) {
