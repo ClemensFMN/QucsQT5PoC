@@ -10,7 +10,10 @@
 
 class Wire;
 
-
+/*
+ * A component which can be placed onto a schematic
+ * currently, the component has two nodes (ports)
+*/
 class Component : public QGraphicsItem {
 
 public:
@@ -31,8 +34,12 @@ protected:
 
 private:
     QString _name;
+    //the set of node positions
     QList<QPointF> _nodes;
+    // a list for every node to keep track of whcih wires are connected to this node -> I know this is ugly
     QList<Wire*> _wires1, _wires2;
+    // this would be the preferred way to do it (a list of a list of wires; one list for every node); but
+    // I'm struggling with initializing this list
     QList<QList<Wire*> > _wires;
 };
 

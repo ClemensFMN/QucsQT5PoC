@@ -9,7 +9,7 @@ Component::Component(QString name) {
     QPointF p2(20, 0);
     _nodes.append(p2);
 
-    //TODO: Init _wires
+    //TODO: Somehow this doesn't work yet...
      //qDebug() << "init _wires";
      //_wires[0] = QList<Wire*>();
      //_wires[1] = QList<Wire*>();

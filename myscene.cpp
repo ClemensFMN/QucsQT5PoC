@@ -18,6 +18,16 @@ void MyScene::setDrawingItem(QString itemtype) {
 
 void MyScene::exportScene() {
 
+    /*
+     * Not much to see here yet - this should create & export a netlist in qucs format
+     * first thing to do is to label the wires -> all wires which are (electrically) connected should
+     * get the same (net) name
+     * Sounds like some graph coloring problem / algorithm & I tihnk I'm not the first one to think about
+     * this problem... I've thought of some kind of recursive flooding algorithm -> start with one wire,
+     * assign it a name, visit all wires it is connected with (in a recursive manner) & give them the
+     * same name
+    */
+
     //qDebug() << wires.at(0)->getNode1()->getName() << wires.at(0)->getNode2()->getName();
 
     //qDebug() << wires.at(0)->getNode1();
@@ -60,6 +70,7 @@ void MyScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {
                 // if it's a node continue
                 startComponent = n;
                 startPoint = n->mapFromScene(mouseEvent->scenePos());
+                // and find the closest node to the mouse click
                 QList<QPointF> nnodes = n->getNodes();
                 qreal dist = 500.0;
                 for(int i=0; i<nnodes.length(); i++) {
@@ -71,6 +82,7 @@ void MyScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {
                     }
                 }
                 //qDebug() << "startPoint" << startPoint;
+                // Since the end point component isn't known yet, let's draw a line instead - as some kind of visual feedback...
                 line = new QGraphicsLineItem(QLineF(startComponent->mapToScene(startPoint), startComponent->mapToScene(startPoint)));
                 line->setPen(QPen(Qt::red, 2));
                 addItem(line);
@@ -107,6 +119,7 @@ void MyScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent) {
                 // if it's a node continue
                 Component *endComponent = n;
                 QPointF endPoint = n->mapFromScene(mouseEvent->scenePos());
+                // and find the closest node to the mouse click -- TODO: factor out into a separate method
                 QList<QPointF> nnodes = n->getNodes();
                 qreal dist = 500.0;
                 for(int i=0; i<nnodes.length(); i++) {
@@ -122,6 +135,7 @@ void MyScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent) {
                 Wire *e = new Wire(startComponent, startComponent->getNodes().indexOf(startPoint), endComponent, endComponent->getNodes().indexOf(endPoint));
                 wires.append(e);
                 addItem(e);
+                // having the wire in place, we can remove the temporary line...
                 removeItem(line);
             }
         }

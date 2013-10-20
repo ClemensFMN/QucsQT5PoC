@@ -20,7 +20,9 @@ public:
     int getNode2();
 
 private:
+    // the components the wire connects
     Component *Component1, *Component2;
+    // and the nodes (of the components) the wire connects
     int node1, node2;
     QLineF line;
     QString _name;

@@ -40,6 +40,8 @@ void Wire::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     qDebug() << Component2->getNodes().at(node2);
     */
 
+    // the wire knows the components and their nodes it connects
+    // -> we map node1 from comp1's coordinate system to the scene & connect it with the mapped node1 from comp2's coordinate system
     QLineF line(mapFromItem(Component1, Component1->getNodes().at(node1)), mapFromItem(Component2, Component2->getNodes().at(node2)));
     painter->setPen(QPen(Qt::blue, 2, Qt::SolidLine));
     painter->drawLine(line);
