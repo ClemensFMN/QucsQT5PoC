@@ -6,13 +6,13 @@ Wire::Wire(Component *c1, int n1, Component *c2, int n2) {
     Component2 = c2;
     node2 = n2;
 
-    qDebug() << "c1:" << Component1->getName() << "Node:" << node1;
-    qDebug() << "c2:" << Component2->getName() << "Node:" << node2;
+    //qDebug() << "c1:" << Component1->getName() << "Node:" << node1;
+    //qDebug() << "c2:" << Component2->getName() << "Node:" << node2;
 
     c1->addWire(n1, this);
     c2->addWire(n2, this);
 
-    _name = 0;
+    _name = -1;
 
     qDebug() << "wire created";
 }

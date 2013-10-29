@@ -21,7 +21,27 @@ void MyScene::NameWire(Component *c, int n) {
 
     QVector<Wire*> wires = c->getWires(n);
     foreach(Wire* w, wires) {
-        w->setName(netNum);
+
+        if(w->getName() == -1) {
+            w->setName(netNum);
+        }
+        else {
+            return;
+        }
+
+        Component *nextComponent;
+        int nextNode;
+        if(w->getComponent1() == c) {
+            nextComponent = w->getComponent2();
+            nextNode = w->getNode2();
+        }
+        else {
+            nextComponent = w->getComponent1();
+            nextNode = w->getNode1();
+        }
+
+        NameWire(nextComponent, nextNode);
+
     }
 
 }
@@ -38,30 +58,24 @@ void MyScene::exportScene() {
      * same name
     */
 
+    netNum++;
     NameWire(wires[0]->getComponent1(), wires[0]->getNode1());
+    NameWire(wires[0]->getComponent2(), wires[0]->getNode2());
 
-    for(int i=0; i<wires.size(); i++) {
-        qDebug() << wires[i]->getComponent1()->getName() << wires[i]->getComponent2()->getName();
-        qDebug() << wires[i]->getNode1() << wires[i]->getNode2();
-        /*
-        int node1 = wires[i]->getNode1();
-        qDebug() << wires[i]->getComponent1()->getWires(node1);
-        int node2 = wires[i]->getNode2();
-        qDebug() << wires[i]->getComponent2()->getWires(node2);
-        */
+    qDebug() << "List Wires";
+
+    foreach(Wire* w, wires) {
+        qDebug() << w->getComponent1()->getName() << w->getNode1() << w->getName() << w->getComponent2()->getName() << w->getNode2();
     }
 
-    /*
-    for(int i=0; i<components.count(); i++) {
-        Component *c = components.at(i);
-        qDebug() << c->getName();
-        QList<Wire*> wires = c->getWires();
-        for(int j=0; j<wires.length(); j++) {
-            Wire *w = wires.at(j);
-            qDebug() << w->getName();
-        }
+
+    qDebug() << "Export Netlist";
+
+    for(int i=0; i<components.size(); i++) {
+        Component *c = components[i];
+        qDebug() << c->getName() << c->getWires(0).at(0)->getName() << c->getWires(1).at(0)->getName();
     }
-*/
+
 }
 
 void MyScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {
