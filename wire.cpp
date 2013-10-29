@@ -12,7 +12,7 @@ Wire::Wire(Component *c1, int n1, Component *c2, int n2) {
     c1->addWire(n1, this);
     c2->addWire(n2, this);
 
-    _name = "";
+    _name = 0;
 
     qDebug() << "wire created";
 }
@@ -32,13 +32,13 @@ QRectF Wire::boundingRect() const {
 
 void Wire::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
 
-    /*
+/*
     qDebug() << "wire paint" << Component1->getName() << Component2->getName();
     qDebug() << Component1->getNodes() << Component2->getNodes();
     qDebug() << node1 << "..." << node2;
     qDebug() << Component1->getNodes().at(node1);
     qDebug() << Component2->getNodes().at(node2);
-    */
+*/
 
     // the wire knows the components and their nodes it connects
     // -> we map node1 from comp1's coordinate system to the scene & connect it with the mapped node1 from comp2's coordinate system
@@ -48,12 +48,12 @@ void Wire::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 
 }
 
-QString Wire::getName() {
+int Wire::getName() {
     return _name; //Node1->getName() + Node2->getName();
 }
 
-void Wire::setName(QString s) {
-    _name = s;
+void Wire::setName(int i) {
+    _name = i;
 }
 
 void Wire::adjust() {

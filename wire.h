@@ -12,8 +12,8 @@ public:
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     void adjust();
-    QString getName();
-    void setName(QString s);
+    int getName();
+    void setName(int i);
     Component* getComponent1();
     Component* getComponent2();
     int getNode1();
@@ -25,7 +25,7 @@ private:
     // and the nodes (of the components) the wire connects
     int node1, node2;
     QLineF line;
-    QString _name;
+    int _name;
 };
 
 #endif // WIRE_H

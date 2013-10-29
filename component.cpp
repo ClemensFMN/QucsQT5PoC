@@ -15,6 +15,8 @@ Component::Component(QString name) {
      //_wires[1] = QList<Wire*>();
      //qDebug() << "finished init _wires";
 
+    _wires = QVector<QVector<Wire*> > (2);
+
     setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemSendsGeometryChanges);
 }
 
@@ -24,7 +26,7 @@ QRectF Component::boundingRect() const {
 
 void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
 
-    for(int i=0; i<_nodes.length(); i++) {
+    for(int i=0; i<_nodes.size(); i++) {
         painter->drawEllipse(_nodes.at(i), 5, 5);
     }
 
@@ -34,41 +36,52 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 }
 
 void Component::addWire(int node, Wire *e) {
-    if(node==0) {
+    /*if(node==0) {
         _wires1.append(e);
     } else {
         _wires2.append(e);
     }
-    //_wires[node].append(e);
+    */
+    _wires[node].append(e);
 }
 
 QString Component::getName() {
     return _name;
 }
 
-QList<Wire *> Component::getWires1(){
+/*QVector<Wire *> Component::getWires1(){
     return _wires1;
 }
 
-QList<Wire *> Component::getWires2(){
+QVector<Wire *> Component::getWires2(){
     return _wires2;
 }
+*/
 
-QList<Wire*> Component::getWires(int node) {
+QVector<Wire*> Component::getWires(int node) {
     return _wires[node];
 }
 
-QList<QPointF> Component::getNodes() {
+QVector<QPointF> Component::getNodes() {
     return _nodes;
 }
 
 QVariant Component::itemChange(GraphicsItemChange change, const QVariant & value) {
-
+/*
     if(change == ItemPositionHasChanged) {
         foreach(Wire *edge, _wires1) {
             edge->adjust();
         }
         foreach(Wire *edge, _wires2) {
+            edge->adjust();
+        }
+    }
+*/
+    if(change == ItemPositionHasChanged) {
+        foreach(Wire *edge, _wires[0]) {
+            edge->adjust();
+        }
+        foreach(Wire *edge, _wires[1]) {
             edge->adjust();
         }
     }

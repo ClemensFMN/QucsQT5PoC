@@ -4,7 +4,7 @@ MyScene::MyScene(QObject *parent) : QGraphicsScene(parent) {
     line = 0;
     mode = 0;
     numComponents = 0;
-
+    netNum = 0;
     //this->setItemIndexMethod(QGraphicsScene::NoIndex);
 }
 
@@ -14,6 +14,16 @@ void MyScene::setMode(int mode) {
 
 void MyScene::setDrawingItem(QString itemtype) {
     this->itemtype = itemtype;
+}
+
+
+void MyScene::NameWire(Component *c, int n) {
+
+    QVector<Wire*> wires = c->getWires(n);
+    foreach(Wire* w, wires) {
+        w->setName(netNum);
+    }
+
 }
 
 void MyScene::exportScene() {
@@ -28,9 +38,18 @@ void MyScene::exportScene() {
      * same name
     */
 
-    //qDebug() << wires.at(0)->getNode1()->getName() << wires.at(0)->getNode2()->getName();
+    NameWire(wires[0]->getComponent1(), wires[0]->getNode1());
 
-    //qDebug() << wires.at(0)->getNode1();
+    for(int i=0; i<wires.size(); i++) {
+        qDebug() << wires[i]->getComponent1()->getName() << wires[i]->getComponent2()->getName();
+        qDebug() << wires[i]->getNode1() << wires[i]->getNode2();
+        /*
+        int node1 = wires[i]->getNode1();
+        qDebug() << wires[i]->getComponent1()->getWires(node1);
+        int node2 = wires[i]->getNode2();
+        qDebug() << wires[i]->getComponent2()->getWires(node2);
+        */
+    }
 
     /*
     for(int i=0; i<components.count(); i++) {
@@ -71,9 +90,9 @@ void MyScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {
                 startComponent = n;
                 startPoint = n->mapFromScene(mouseEvent->scenePos());
                 // and find the closest node to the mouse click
-                QList<QPointF> nnodes = n->getNodes();
+                QVector<QPointF> nnodes = n->getNodes();
                 qreal dist = 500.0;
-                for(int i=0; i<nnodes.length(); i++) {
+                for(int i=0; i<nnodes.size(); i++) {
                     QPointF temp = nnodes.at(i);
                     qreal temp_dist = (temp - startPoint).manhattanLength();
                     if(temp_dist < dist) {
@@ -120,9 +139,9 @@ void MyScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent) {
                 Component *endComponent = n;
                 QPointF endPoint = n->mapFromScene(mouseEvent->scenePos());
                 // and find the closest node to the mouse click -- TODO: factor out into a separate method
-                QList<QPointF> nnodes = n->getNodes();
+                QVector<QPointF> nnodes = n->getNodes();
                 qreal dist = 500.0;
-                for(int i=0; i<nnodes.length(); i++) {
+                for(int i=0; i<nnodes.size(); i++) {
                     QPointF temp = nnodes.at(i);
                     qreal temp_dist = (temp - endPoint).manhattanLength();
                     if(temp_dist < dist) {

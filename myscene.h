@@ -39,6 +39,8 @@ private:
     QList<Component*> components;
     // all wires...
     QList<Wire*> wires;
+    void NameWire(Component*, int);
+    int netNum;
 };
 
 #endif // MYSCENE_H
