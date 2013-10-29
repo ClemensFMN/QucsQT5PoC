@@ -24,24 +24,18 @@ void MyScene::NameWire(Component *c, int n) {
 
         if(w->getName() == -1) {
             w->setName(netNum);
+            Component *nextComponent;
+            int nextNode;
+            if(w->getComponent1() == c) {
+                nextComponent = w->getComponent2();
+                nextNode = w->getNode2();
+            }
+            else {
+                nextComponent = w->getComponent1();
+                nextNode = w->getNode1();
+            }
+            NameWire(nextComponent, nextNode);
         }
-        else {
-            return;
-        }
-
-        Component *nextComponent;
-        int nextNode;
-        if(w->getComponent1() == c) {
-            nextComponent = w->getComponent2();
-            nextNode = w->getNode2();
-        }
-        else {
-            nextComponent = w->getComponent1();
-            nextNode = w->getNode1();
-        }
-
-        NameWire(nextComponent, nextNode);
-
     }
 
 }
@@ -58,9 +52,15 @@ void MyScene::exportScene() {
      * same name
     */
 
-    netNum++;
-    NameWire(wires[0]->getComponent1(), wires[0]->getNode1());
-    NameWire(wires[0]->getComponent2(), wires[0]->getNode2());
+    netNum = 1;
+
+    foreach(Wire* w, wires) {
+        if(w->getName() == -1) {
+            NameWire(w->getComponent1(), w->getNode1());
+            NameWire(w->getComponent2(), w->getNode2());
+            netNum++;
+        }
+    }
 
     qDebug() << "List Wires";
 
