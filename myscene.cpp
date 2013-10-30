@@ -19,10 +19,11 @@ void MyScene::setDrawingItem(QString itemtype) {
 
 void MyScene::NameWire(Component *c, int n) {
 
+    // get the wires ffrom the component's node
     QVector<Wire*> wires = c->getWires(n);
     foreach(Wire* w, wires) {
-
         if(w->getName() == -1) {
+            // if we haven't assigned it an id do it now
             w->setName(netNum);
             Component *nextComponent;
             int nextNode;
@@ -34,29 +35,30 @@ void MyScene::NameWire(Component *c, int n) {
                 nextComponent = w->getComponent1();
                 nextNode = w->getNode1();
             }
+            // after we have obtained the next component's node, we start all over again
             NameWire(nextComponent, nextNode);
         }
+        // already visited this node -> continue
     }
 
 }
 
 void MyScene::exportScene() {
 
-    /*
-     * Not much to see here yet - this should create & export a netlist in qucs format
-     * first thing to do is to label the wires -> all wires which are (electrically) connected should
-     * get the same (net) name
-     * Sounds like some graph coloring problem / algorithm & I tihnk I'm not the first one to think about
-     * this problem... I've thought of some kind of recursive flooding algorithm -> start with one wire,
-     * assign it a name, visit all wires it is connected with (in a recursive manner) & give them the
-     * same name
-    */
+    // this cleans out any netlist names we may have assigned to the wires so far
+    foreach(Wire* w, wires) {
+        w->setName(-1);
+    }
 
+    // the first net becomes the id 1
     netNum = 1;
 
+    // go over all wires, check if they have already gotten a name; if not, start a depth-first search & assign an id
     foreach(Wire* w, wires) {
         if(w->getName() == -1) {
+            // start traversal for one side of the wire
             NameWire(w->getComponent1(), w->getNode1());
+            // and for the other...
             NameWire(w->getComponent2(), w->getNode2());
             netNum++;
         }
