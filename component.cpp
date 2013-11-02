@@ -9,13 +9,7 @@ Component::Component(QString name) {
     QPointF p2(20, 0);
     _nodes.append(p2);
 
-    //TODO: Somehow this doesn't work yet...
-     //qDebug() << "init _wires";
-     //_wires[0] = QList<Wire*>();
-     //_wires[1] = QList<Wire*>();
-     //qDebug() << "finished init _wires";
-
-    _wires = QVector<QVector<Wire*> > (2);
+    _wires = QVector<QVector<Wire*> > (Component::NUM_NODES);
 
     setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemSendsGeometryChanges);
 }
@@ -36,27 +30,12 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 }
 
 void Component::addWire(int node, Wire *e) {
-    /*if(node==0) {
-        _wires1.append(e);
-    } else {
-        _wires2.append(e);
-    }
-    */
     _wires[node].append(e);
 }
 
 QString Component::getName() {
     return _name;
 }
-
-/*QVector<Wire *> Component::getWires1(){
-    return _wires1;
-}
-
-QVector<Wire *> Component::getWires2(){
-    return _wires2;
-}
-*/
 
 QVector<Wire*> Component::getWires(int node) {
     return _wires[node];
@@ -67,22 +46,11 @@ QVector<QPointF> Component::getNodes() {
 }
 
 QVariant Component::itemChange(GraphicsItemChange change, const QVariant & value) {
-/*
     if(change == ItemPositionHasChanged) {
-        foreach(Wire *edge, _wires1) {
-            edge->adjust();
-        }
-        foreach(Wire *edge, _wires2) {
-            edge->adjust();
-        }
-    }
-*/
-    if(change == ItemPositionHasChanged) {
-        foreach(Wire *edge, _wires[0]) {
-            edge->adjust();
-        }
-        foreach(Wire *edge, _wires[1]) {
-            edge->adjust();
+        for(int i=0; i<Component::NUM_NODES; i++) {
+            foreach(Wire *edge, _wires[i]) {
+                edge->adjust();
+            }
         }
     }
 

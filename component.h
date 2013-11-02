@@ -36,11 +36,8 @@ private:
     QString _name;
     //the set of node positions
     QVector<QPointF> _nodes;
-    // a list for every node to keep track of whcih wires are connected to this node -> I know this is ugly
-    //QVector<Wire*> _wires1, _wires2;
-    // this would be the preferred way to do it (a list of a list of wires; one list for every node); but
-    // I'm struggling with initializing this list
     QVector<QVector<Wire*> > _wires;
+    const int NUM_NODES = 2;
 };
 
 #endif // COMPONENT_H
