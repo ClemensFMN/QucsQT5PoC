@@ -3,19 +3,11 @@
 
 Component::Component(QString name) {
     _name = name;
-
-    QPointF p1(-20, 0);
-    _nodes.append(p1);
-    QPointF p2(20, 0);
-    _nodes.append(p2);
-
-    _wires = QVector<QVector<Wire*> > (Component::NUM_NODES);
-
     setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemSendsGeometryChanges);
 }
 
 QRectF Component::boundingRect() const {
-    return QRectF(-30, -20, 60, 40);
+    return QRectF(0, 0, 0, 0);
 }
 
 void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {

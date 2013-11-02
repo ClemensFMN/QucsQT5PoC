@@ -23,8 +23,6 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     void addWire(int, Wire *e);
     QString getName();
-    //QVector<Wire*> getWires1();
-    //QVector<Wire*> getWires2();
     QVector<Wire*> getWires(int);
     QVector<QPointF> getNodes();
 
@@ -32,12 +30,12 @@ public:
 protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant & value);
 
-private:
+protected:
     QString _name;
     //the set of node positions
     QVector<QPointF> _nodes;
     QVector<QVector<Wire*> > _wires;
-    const int NUM_NODES = 2;
+    int NUM_NODES;
 };
 
 #endif // COMPONENT_H

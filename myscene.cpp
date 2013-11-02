@@ -85,10 +85,18 @@ void MyScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {
     // place item
     if(mode == 2) {
         Component *n;
-        if(itemtype == "Item 1") {
+        if(itemtype == "Resistor") {
             numComponents++;
-            QString name = QString("Node %0").arg(numComponents);
-            n = new Component(name);
+            QString name = QString("Resistor %0").arg(numComponents);
+            n = new Resistor(name);
+            components.append(n);
+            addItem(n);
+            n->setPos(mouseEvent->scenePos());
+        }
+        if(itemtype == "Capacitor") {
+            numComponents++;
+            QString name = QString("Capacitor %0").arg(numComponents);
+            n = new Capacitor(name);
             components.append(n);
             addItem(n);
             n->setPos(mouseEvent->scenePos());

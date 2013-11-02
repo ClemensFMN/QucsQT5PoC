@@ -9,8 +9,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     itemList->setFixedWidth(150);
 
 
-    QListWidgetItem *item1 = new QListWidgetItem("Item 1");
-    QListWidgetItem *item2 = new QListWidgetItem("Item 2");
+    QListWidgetItem *item1 = new QListWidgetItem("Resistor");
+    QListWidgetItem *item2 = new QListWidgetItem("Capacitor");
 
     itemList->addItem(item1);
     itemList->addItem(item2);
@@ -73,8 +73,13 @@ void MainWindow::toolActionsSlot(QAction *a) {
     if(a->text() == "Place Item") {
         scene->setMode(2);
         //initialization for "Place Item"
-        itemList->setCurrentRow(0);
-        scene->setDrawingItem("Item 1");
+        int selected = itemList->currentRow();
+        if(selected == 0) {
+            scene->setDrawingItem("Resistor");
+        }
+        if(selected == 1) {
+            scene->setDrawingItem("Capacitor");
+        }
     }
 
 }
