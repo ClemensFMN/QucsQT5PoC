@@ -19,13 +19,21 @@ Wire::Wire(Component *c1, int n1, Component *c2, int n2) {
 
 QRectF Wire::boundingRect() const {
 
+    /*
     qreal deltaX = qAbs(Component1->x() - Component2->x());
     qreal deltaY = qAbs(Component1->y() - Component2->y());
 
     qreal posX = qMin(Component1->x(), Component2->x());
     qreal posY = qMin(Component1->y(), Component2->y());
+    */
 
-    return QRectF(posX, posY, deltaX, deltaY);
+    qreal deltaX = qAbs(mapFromItem(Component1, Component1->getNodes().at(node1)).x() - mapFromItem(Component2, Component2->getNodes().at(node2)).x());
+    qreal deltaY = qAbs(mapFromItem(Component1, Component1->getNodes().at(node1)).y() - mapFromItem(Component2, Component2->getNodes().at(node2)).y());
+
+    qreal posX = qMin(mapFromItem(Component1, Component1->getNodes().at(node1)).x(), mapFromItem(Component2, Component2->getNodes().at(node2)).x());
+    qreal posY = qMin(mapFromItem(Component1, Component1->getNodes().at(node1)).y(), mapFromItem(Component2, Component2->getNodes().at(node2)).y());
+
+    return QRectF(posX-1, posY-1, deltaX+2, deltaY+2);
 }
 
 
@@ -43,8 +51,12 @@ void Wire::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     // the wire knows the components and their nodes it connects
     // -> we map node1 from comp1's coordinate system to the scene & connect it with the mapped node1 from comp2's coordinate system
     QLineF line(mapFromItem(Component1, Component1->getNodes().at(node1)), mapFromItem(Component2, Component2->getNodes().at(node2)));
+    painter->setRenderHint(QPainter::Antialiasing);
     painter->setPen(QPen(Qt::blue, 2, Qt::SolidLine));
     painter->drawLine(line);
+
+    //painter->setPen(QPen(Qt::yellow, 2, Qt::SolidLine));
+    //painter->drawRect(boundingRect());
 
 }
 

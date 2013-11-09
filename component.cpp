@@ -16,6 +16,13 @@ void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         painter->drawEllipse(_nodes.at(i), 5, 5);
     }
 
+    foreach (Line *l, Lines) {
+      QPen pen(l->style);
+      pen.setCosmetic(true); // do not scale thickness
+      painter->setPen(pen);
+      painter->drawLine(l->x1, l->y1, l->x2, l->y2);
+    }
+
     painter->drawText(boundingRect(), _name);
     painter->setPen(QPen(Qt::green, 2, Qt::SolidLine));
     painter->drawRect(boundingRect());
@@ -38,7 +45,7 @@ QVector<QPointF> Component::getNodes() {
 }
 
 QVariant Component::itemChange(GraphicsItemChange change, const QVariant & value) {
-    if(change == ItemPositionHasChanged) {
+    if(change == ItemPositionHasChanged || change==QGraphicsItem::ItemPositionChange) {
         for(int i=0; i<Component::NUM_NODES; i++) {
             foreach(Wire *edge, _wires[i]) {
                 edge->adjust();

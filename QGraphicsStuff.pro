@@ -14,8 +14,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp mainwindow.cpp myscene.cpp \
     component.cpp \
-    wire.cpp
+    wire.cpp \
+    resistor.cpp \
+    capacitor.cpp
 
 HEADERS  += mainwindow.h myscene.h \
     component.h \
-    wire.h
+    wire.h \
+    resistor.h \
+    capacitor.h
