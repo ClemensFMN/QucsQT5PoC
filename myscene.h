@@ -8,6 +8,7 @@
 #include "component.h"
 #include "resistor.h"
 #include "capacitor.h"
+#include "ground.h"
 #include "mainwindow.h"
 
 

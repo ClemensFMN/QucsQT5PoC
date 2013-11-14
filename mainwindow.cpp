@@ -11,9 +11,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
     QListWidgetItem *item1 = new QListWidgetItem("Resistor");
     QListWidgetItem *item2 = new QListWidgetItem("Capacitor");
+    QListWidgetItem *item3 = new QListWidgetItem("Ground");
 
     itemList->addItem(item1);
     itemList->addItem(item2);
+    itemList->addItem(item3);
 
     leftDock->setWidget(itemList);
 
@@ -79,6 +81,9 @@ void MainWindow::toolActionsSlot(QAction *a) {
         }
         if(selected == 1) {
             scene->setDrawingItem("Capacitor");
+        }
+        if(selected == 2) {
+            scene->setDrawingItem("Ground");
         }
     }
 

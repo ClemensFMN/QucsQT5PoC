@@ -101,6 +101,14 @@ void MyScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {
             addItem(n);
             n->setPos(mouseEvent->scenePos());
         }
+        if(itemtype == "Ground") {
+            numComponents++;
+            QString name = QString("GND").arg(numComponents);
+            n = new Ground(name);
+            components.append(n);
+            addItem(n);
+            n->setPos(mouseEvent->scenePos());
+        }
     }
 
     // line
