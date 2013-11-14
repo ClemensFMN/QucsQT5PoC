@@ -44,6 +44,10 @@ QVector<QPointF> Component::getNodes() {
     return _nodes;
 }
 
+int Component::getNumNodes() {
+    return _nodes.size();
+}
+
 QPointF Component::getNearestPort(QPointF s) {
     QPointF startPoint = this->mapFromScene(s);
     // the maximum a click can be off is the diagonal of the bounding box

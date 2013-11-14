@@ -50,6 +50,16 @@ void MyScene::exportScene() {
         w->setName(-1);
     }
 
+    // all wires connected with ground get id = 0
+    netNum = 0;
+    // let's go over all components and if it's a gnd component, assign net id 0 to all connected wires
+    foreach(Component* c, components) {
+        if(c->getName() == "GND") {
+            NameWire(c, 0);
+        }
+    }
+
+
     // the first net becomes the id 1
     netNum = 1;
 
@@ -64,20 +74,21 @@ void MyScene::exportScene() {
         }
     }
 
-    qDebug() << "List Wires";
-
-    foreach(Wire* w, wires) {
-        qDebug() << w->getComponent1()->getName() << w->getNode1() << w->getName() << w->getComponent2()->getName() << w->getNode2();
-    }
-
-
     qDebug() << "Export Netlist";
-
     for(int i=0; i<components.size(); i++) {
         Component *c = components[i];
-        qDebug() << c->getName() << c->getWires(0).at(0)->getName() << c->getWires(1).at(0)->getName();
-    }
+        if(c->getName() != "GND") {
+            int nodes = c->getNumNodes();
+            QString temp = c->getName();
 
+            for(int i=0; i<nodes; i++) {
+                int num = c->getWires(i).at(0)->getName();
+                temp = temp + " " + QString("%1").arg(num);
+            }
+
+            qDebug() << temp;
+        }
+    }
 }
 
 void MyScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {

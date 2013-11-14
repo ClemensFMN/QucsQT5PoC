@@ -34,6 +34,7 @@ public:
     QVector<Wire*> getWires(int);
     QVector<QPointF> getNodes();
     QPointF getNearestPort(QPointF);
+    int getNumNodes();
 
 
 protected:
