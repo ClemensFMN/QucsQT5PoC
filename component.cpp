@@ -46,8 +46,9 @@ QVector<QPointF> Component::getNodes() {
 
 QPointF Component::getNearestPort(QPointF s) {
     QPointF startPoint = this->mapFromScene(s);
-    //QVector<QPointF> nnodes = this->getNodes();
-    qreal dist = 500.0;
+    // the maximum a click can be off is the diagonal of the bounding box
+    QRectF bb = this->boundingRect();
+    qreal dist = pow(bb.height(), 2)+  pow(bb.width(), 2);
     for(int i=0; i<_nodes.size(); i++) {
         QPointF temp = _nodes.at(i);
         qreal temp_dist = pow((temp - startPoint).x(), 2) + pow((temp - startPoint).y(), 2);
