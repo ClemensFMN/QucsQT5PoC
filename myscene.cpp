@@ -112,18 +112,7 @@ void MyScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {
             if(n != 0) {
                 // if it's a node continue
                 startComponent = n;
-                startPoint = n->mapFromScene(mouseEvent->scenePos());
-                // and find the closest node to the mouse click
-                QVector<QPointF> nnodes = n->getNodes();
-                qreal dist = 500.0;
-                for(int i=0; i<nnodes.size(); i++) {
-                    QPointF temp = nnodes.at(i);
-                    qreal temp_dist = (temp - startPoint).manhattanLength();
-                    if(temp_dist < dist) {
-                        startPoint = nnodes.at(i);
-                        dist = temp_dist;
-                    }
-                }
+                startPoint = n->getNearestPort(mouseEvent->scenePos());
                 //qDebug() << "startPoint" << startPoint;
                 // Since the end point component isn't known yet, let's draw a line instead - as some kind of visual feedback...
                 line = new QGraphicsLineItem(QLineF(startComponent->mapToScene(startPoint), startComponent->mapToScene(startPoint)));
@@ -161,18 +150,7 @@ void MyScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent) {
             if(n != 0) {
                 // if it's a node continue
                 Component *endComponent = n;
-                QPointF endPoint = n->mapFromScene(mouseEvent->scenePos());
-                // and find the closest node to the mouse click -- TODO: factor out into a separate method
-                QVector<QPointF> nnodes = n->getNodes();
-                qreal dist = 500.0;
-                for(int i=0; i<nnodes.size(); i++) {
-                    QPointF temp = nnodes.at(i);
-                    qreal temp_dist = (temp - endPoint).manhattanLength();
-                    if(temp_dist < dist) {
-                        endPoint = nnodes.at(i);
-                        dist = temp_dist;
-                    }
-                }
+                QPointF endPoint = n->getNearestPort(mouseEvent->scenePos());
                 //qDebug() << "startindex" << startComponent->getNodes().indexOf(startPoint);
                 //qDebug() << "endindex" << endComponent->getNodes().indexOf(endPoint);
                 Wire *e = new Wire(startComponent, startComponent->getNodes().indexOf(startPoint), endComponent, endComponent->getNodes().indexOf(endPoint));

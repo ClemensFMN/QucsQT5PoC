@@ -44,6 +44,22 @@ QVector<QPointF> Component::getNodes() {
     return _nodes;
 }
 
+QPointF Component::getNearestPort(QPointF s) {
+    QPointF startPoint = this->mapFromScene(s);
+    //QVector<QPointF> nnodes = this->getNodes();
+    qreal dist = 500.0;
+    for(int i=0; i<_nodes.size(); i++) {
+        QPointF temp = _nodes.at(i);
+        qreal temp_dist = pow((temp - startPoint).x(), 2) + pow((temp - startPoint).y(), 2);
+        if(temp_dist < dist) {
+            startPoint = _nodes.at(i);
+            dist = temp_dist;
+        }
+    }
+    return startPoint;
+}
+
+
 QVariant Component::itemChange(GraphicsItemChange change, const QVariant & value) {
     if(change == ItemPositionHasChanged || change==QGraphicsItem::ItemPositionChange) {
         for(int i=0; i<Component::NUM_NODES; i++) {

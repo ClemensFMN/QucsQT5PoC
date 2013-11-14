@@ -21,7 +21,6 @@ struct Line {
 
 /*
  * A component which can be placed onto a schematic
- * currently, the component has two nodes (ports)
 */
 class Component : public QGraphicsItem {
 
@@ -34,6 +33,7 @@ public:
     QString getName();
     QVector<Wire*> getWires(int);
     QVector<QPointF> getNodes();
+    QPointF getNearestPort(QPointF);
 
 
 protected:
