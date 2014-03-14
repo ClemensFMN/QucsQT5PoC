@@ -52,10 +52,11 @@ QPointF Component::getNearestPort(QPointF s) {
     QPointF startPoint = this->mapFromScene(s);
     // the maximum a click can be off is the diagonal of the bounding box
     QRectF bb = this->boundingRect();
-    qreal dist = pow(bb.height(), 2)+  pow(bb.width(), 2);
+    qreal dist = pow(bb.height(), 2) + pow(bb.width(), 2) / 4;
     for(int i=0; i<_nodes.size(); i++) {
         QPointF temp = _nodes.at(i);
         qreal temp_dist = pow((temp - startPoint).x(), 2) + pow((temp - startPoint).y(), 2);
+        qDebug() << temp_dist;
         if(temp_dist < dist) {
             startPoint = _nodes.at(i);
             dist = temp_dist;

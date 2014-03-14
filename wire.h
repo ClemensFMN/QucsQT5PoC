@@ -1,6 +1,8 @@
 #ifndef WIRE_H
 #define WIRE_H
 
+#include <QVector>
+#include <QList>
 #include "component.h"
 
 class Component;
@@ -26,6 +28,7 @@ private:
     int node1, node2;
     QLineF line;
     int _name;
+    QList<QPointF> points;
 };
 
 #endif // WIRE_H
