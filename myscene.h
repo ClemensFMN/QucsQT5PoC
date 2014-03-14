@@ -36,14 +36,14 @@ private:
     int mode;
     QString itemtype;
     int numComponents;
-    Component *startComponent;
-    QPointF startPoint;
     // all components within the current schematic
     QList<Component*> components;
     // all wires...
     QList<Wire*> wires;
     void NameWire(Component*, int);
     int netNum;
+    bool captureMode;
+    Wire* w;
 };
 
 #endif // MYSCENE_H

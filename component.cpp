@@ -52,7 +52,7 @@ QPointF Component::getNearestPort(QPointF s) {
     QPointF startPoint = this->mapFromScene(s);
     // the maximum a click can be off is the diagonal of the bounding box
     QRectF bb = this->boundingRect();
-    qreal dist = pow(bb.height(), 2) + pow(bb.width(), 2) / 4;
+    qreal dist = pow(bb.height(), 2) / 2 + pow(bb.width(), 2) / 2;
     for(int i=0; i<_nodes.size(); i++) {
         QPointF temp = _nodes.at(i);
         qreal temp_dist = pow((temp - startPoint).x(), 2) + pow((temp - startPoint).y(), 2);
@@ -68,8 +68,10 @@ QPointF Component::getNearestPort(QPointF s) {
 
 QVariant Component::itemChange(GraphicsItemChange change, const QVariant & value) {
     if(change == ItemPositionHasChanged || change==QGraphicsItem::ItemPositionChange) {
+        qDebug() << "itemchange";
         for(int i=0; i<Component::NUM_NODES; i++) {
             foreach(Wire *edge, _wires[i]) {
+                qDebug() << "adjust";
                 edge->adjust();
             }
         }

@@ -6,15 +6,46 @@ Wire::Wire(Component *c1, int n1, Component *c2, int n2) {
     Component2 = c2;
     node2 = n2;
 
-    //qDebug() << "c1:" << Component1->getName() << "Node:" << node1;
-    //qDebug() << "c2:" << Component2->getName() << "Node:" << node2;
-
     c1->addWire(n1, this);
     c2->addWire(n2, this);
 
     _name = -1;
 
     qDebug() << "wire created";
+}
+
+Wire::Wire(Component *c1, int n1) {
+    Component1 = c1;
+    node1 = n1;
+
+    c1->addWire(n1, this);
+
+    _name = -1;
+
+    qDebug() << "wire started";
+}
+
+
+void Wire::finalizeWire(Component *c2, int n2) {
+    Component2 = c2;
+    node2 = n2;
+
+    c2->addWire(n2, this);
+
+    _name = -1;
+
+    qDebug() << "wire finalized";
+
+    qDebug() << "c1:" << Component1->getName() << "Node:" << node1;
+    qDebug() << "c2:" << Component2->getName() << "Node:" << node2;
+
+    this->update();
+
+}
+
+void Wire::addSegment(QPointF p) {
+    points.append(p);
+    qDebug() << "add segment";
 }
 
 QRectF Wire::boundingRect() const {
@@ -34,29 +65,34 @@ QRectF Wire::boundingRect() const {
     qreal posY = qMin(mapFromItem(Component1, Component1->getNodes().at(node1)).y(), mapFromItem(Component2, Component2->getNodes().at(node2)).y());
 
     return QRectF(posX-1, posY-1, deltaX+2, deltaY+2);
+    //return QRectF(0,0,1000,1000);
 }
 
 
 
 void Wire::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
 
-/*
-    qDebug() << "wire paint" << Component1->getName() << Component2->getName();
-    qDebug() << Component1->getNodes() << Component2->getNodes();
-    qDebug() << node1 << "..." << node2;
-    qDebug() << Component1->getNodes().at(node1);
-    qDebug() << Component2->getNodes().at(node2);
-*/
+    qDebug() << "paint" << points.size();
 
     // the wire knows the components and their nodes it connects
     // -> we map node1 from comp1's coordinate system to the scene & connect it with the mapped node1 from comp2's coordinate system
-    QLineF line(mapFromItem(Component1, Component1->getNodes().at(node1)), mapFromItem(Component2, Component2->getNodes().at(node2)));
-    painter->setRenderHint(QPainter::Antialiasing);
-    painter->setPen(QPen(Qt::blue, 2, Qt::SolidLine));
-    painter->drawLine(line);
+//    if(points.size() == 0) {
+        QLineF line(mapFromItem(Component1, Component1->getNodes().at(node1)), mapFromItem(Component2, Component2->getNodes().at(node2)));
+        painter->setRenderHint(QPainter::Antialiasing);
+        painter->setPen(QPen(Qt::blue, 2, Qt::SolidLine));
+        painter->drawLine(line);
+/*    }
+    else {
 
-    //painter->setPen(QPen(Qt::yellow, 2, Qt::SolidLine));
-    //painter->drawRect(boundingRect());
+        QLineF line1(mapFromItem(Component1, Component1->getNodes().at(node1)), points.at(1));
+
+        QLineF lineL(points.at(points.size()-1), mapFromItem(Component2, Component2->getNodes().at(node2)));
+        painter->setRenderHint(QPainter::Antialiasing);
+        painter->setPen(QPen(Qt::blue, 2, Qt::SolidLine));
+        painter->drawLine(line1);
+        painter->drawLine(lineL);
+    }
+*/
 
 }
 

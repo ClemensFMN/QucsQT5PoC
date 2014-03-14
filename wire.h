@@ -11,6 +11,7 @@ class Wire : public QGraphicsItem {
 
 public:
     Wire(Component *, int, Component *, int);
+    Wire(Component *, int);
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     void adjust();
@@ -20,6 +21,8 @@ public:
     Component* getComponent2();
     int getNode1();
     int getNode2();
+    void finalizeWire(Component *, int);
+    void addSegment(QPointF);
 
 private:
     // the components the wire connects

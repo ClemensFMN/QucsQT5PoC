@@ -25,7 +25,6 @@ public slots:
 private:
     MyScene *scene;
     QListWidget *itemList;
-
 };
 
 #endif // MAINWINDOW_H

@@ -5,6 +5,7 @@ MyScene::MyScene(QObject *parent) : QGraphicsScene(parent) {
     mode = 0;
     numComponents = 0;
     netNum = 0;
+    captureMode = true;
     //this->setItemIndexMethod(QGraphicsScene::NoIndex);
 }
 
@@ -124,38 +125,58 @@ void MyScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {
 
     // line
     if(mode == 1) {
-        if(line == 0) {
-            qDebug() << "line = 0";
+        if(captureMode == true) {
+            qDebug() << "capturemode = true";
             // find all items @ pos of mouse click
             QList<QGraphicsItem*> items = this->items(mouseEvent->scenePos());
             if(items.count() != 0) {
                 Component *n = qgraphicsitem_cast<Component*>(items.last());
                 if(n != 0) {
                     // if it's a node continue
-                    startComponent = n;
-                    startPoint = n->getNearestPort(mouseEvent->scenePos());
-                    //qDebug() << "startPoint" << startPoint;
+                    Component *startComponent = n;
+                    QPointF startPoint = n->getNearestPort(mouseEvent->scenePos());
                     // Since the end point component isn't known yet, let's draw a line instead - as some kind of visual feedback...
                     line = new QGraphicsLineItem(QLineF(startComponent->mapToScene(startPoint), startComponent->mapToScene(startPoint)));
                     line->setPen(QPen(Qt::red, 2));
-                    //addItem(line);
-                    // we would need to instantiate a "partial" wire - the start point is known
-
+                    addItem(line);
+                    captureMode = false;
+                    // we instantiate a "partial" wire - the start point is known
+                    w = new Wire(startComponent, startComponent->getNodes().indexOf(startPoint));
                 }
             }
         }
-        else {
-            qDebug() << "line != 0";
-            QGraphicsLineItem *newLine = new QGraphicsLineItem(QLineF(line->line().p1(), mouseEvent->scenePos()));
-            newLine->setPen(QPen(Qt::red, 2));
-            addItem(newLine);
+        else { //capturemode = false
 
-            if(mouseEvent->button()==Qt::LeftButton) {
-                //here we add additional points to the "partial" wire...
+            qDebug() << "capturemode = false";
+
+            if(mouseEvent->button() == Qt::LeftButton) {
+                line = new QGraphicsLineItem(QLineF(line->line().p2(), mouseEvent->scenePos()));
+                line->setPen(QPen(Qt::red, 2));
+                addItem(line);
+                // add point to wire & redraw wire
+                w->addSegment(mouseEvent->scenePos());
             }
-            if(mouseEvent->button()==Qt::RightButton) {
-                //here we finalize the "partial" wire...
-                line = 0;
+            else {
+
+                // find all items @ pos of mouse click
+                QList<QGraphicsItem*> items = this->items(mouseEvent->scenePos());
+                if(items.count() != 0) {
+                    Component *n = qgraphicsitem_cast<Component*>(items.last());
+                    if(n != 0) {
+                        // if it's a node continue
+                        Component *endComponent = n;
+                        QPointF endPoint = n->getNearestPort(mouseEvent->scenePos());
+                        // Since the end point component isn't known yet, let's draw a line instead - as some kind of visual feedback...
+                        line = new QGraphicsLineItem(QLineF(line->line().p2(), endComponent->mapToScene(endPoint)));
+                        line->setPen(QPen(Qt::red, 2));
+                        addItem(line);
+                        captureMode = true;
+                        // finalize "partial" wire
+                        w->finalizeWire(endComponent, endComponent->getNodes().indexOf(endPoint));
+                        wires.append(w);
+                        w->update();
+                    }
+                }
             }
         }
     }
@@ -167,50 +188,9 @@ void MyScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {
 
 void MyScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent) {
 
-    /*qDebug() << "mousemove" << mode;
-
-    if(mode == 1) {
-        qDebug() << "mousemove";
-        // update the line accordingly
-        QLineF newLine(line->line().p1(), mouseEvent->scenePos());
-        line->setLine(newLine);
-    }
-*/
     QGraphicsScene::mouseMoveEvent(mouseEvent);
 }
 
 void MyScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent) {
-
-    // create an edge & make it connect the startnode with the endnode
-    /*
-    if(mode == 1) {
-
-        QList<QGraphicsItem*> items = this->items(mouseEvent->scenePos());
-
-        if(items.count() != 0) {
-            Component *n = qgraphicsitem_cast<Component*>(items.last());
-            if(n != 0) {
-                // if it's a node continue
-                Component *endComponent = n;
-                QPointF endPoint = n->getNearestPort(mouseEvent->scenePos());
-                //qDebug() << "startindex" << startComponent->getNodes().indexOf(startPoint);
-                //qDebug() << "endindex" << endComponent->getNodes().indexOf(endPoint);
-                Wire *e = new Wire(startComponent, startComponent->getNodes().indexOf(startPoint), endComponent, endComponent->getNodes().indexOf(endPoint));
-                wires.append(e);
-                addItem(e);
-                // having the wire in place, we can remove the temporary line...
-                removeItem(line);
-            }
-        }
-    }
-
-    if(mode == 1) {
-        if(line != 0) {
-            line = new QGraphicsLineItem(QLineF(mouseEvent->scenePos(), mouseEvent->scenePos()));
-            line->setPen(QPen(Qt::red, 2));
-            addItem(line);
-        }
-    }
-*/
     QGraphicsScene::mouseReleaseEvent(mouseEvent);
 }
