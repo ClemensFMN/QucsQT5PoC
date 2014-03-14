@@ -28,7 +28,7 @@ public:
     Component(QString);
 
     QRectF boundingRect() const;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
     void addWire(int, Wire *e);
     QString getName();
     QVector<Wire*> getWires(int);
@@ -38,7 +38,7 @@ public:
 
 
 protected:
-    QVariant itemChange(GraphicsItemChange change, const QVariant & value);
+    QVariant itemChange(GraphicsItemChange , const QVariant & );
 
 protected:
     QString _name;

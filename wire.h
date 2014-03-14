@@ -13,7 +13,7 @@ public:
     Wire(Component *, int, Component *, int);
     Wire(Component *, int);
     QRectF boundingRect() const;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *);
     void adjust();
     int getName();
     void setName(int i);

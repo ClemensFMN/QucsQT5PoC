@@ -142,6 +142,8 @@ void MyScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {
                     captureMode = false;
                     // we instantiate a "partial" wire - the start point is known
                     w = new Wire(startComponent, startComponent->getNodes().indexOf(startPoint));
+                    // we expect the partial wire to be able to draw itself - but appearantly there is some problem...
+                    addItem(w);
                 }
             }
         }
@@ -155,6 +157,7 @@ void MyScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {
                 addItem(line);
                 // add point to wire & redraw wire
                 w->addSegment(mouseEvent->scenePos());
+                w->update();
             }
             else {
 
@@ -173,8 +176,8 @@ void MyScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {
                         captureMode = true;
                         // finalize "partial" wire
                         w->finalizeWire(endComponent, endComponent->getNodes().indexOf(endPoint));
-                        wires.append(w);
                         w->update();
+                        wires.append(w);
                     }
                 }
             }

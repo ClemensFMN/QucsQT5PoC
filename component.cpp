@@ -10,7 +10,7 @@ QRectF Component::boundingRect() const {
     return QRectF(0, 0, 0, 0);
 }
 
-void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+void Component::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
 
     for(int i=0; i<_nodes.size(); i++) {
         painter->drawEllipse(_nodes.at(i), 5, 5);
@@ -52,7 +52,7 @@ QPointF Component::getNearestPort(QPointF s) {
     QPointF startPoint = this->mapFromScene(s);
     // the maximum a click can be off is the diagonal of the bounding box
     QRectF bb = this->boundingRect();
-    qreal dist = pow(bb.height(), 2) / 2 + pow(bb.width(), 2) / 2;
+    qreal dist = pow(bb.height(), 2) + pow(bb.width(), 2);
     for(int i=0; i<_nodes.size(); i++) {
         QPointF temp = _nodes.at(i);
         qreal temp_dist = pow((temp - startPoint).x(), 2) + pow((temp - startPoint).y(), 2);
