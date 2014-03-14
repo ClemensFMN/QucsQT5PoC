@@ -125,6 +125,7 @@ void MyScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {
     // line
     if(mode == 1) {
         if(line == 0) {
+            qDebug() << "line = 0";
             // find all items @ pos of mouse click
             QList<QGraphicsItem*> items = this->items(mouseEvent->scenePos());
             if(items.count() != 0) {
@@ -137,17 +138,19 @@ void MyScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {
                     // Since the end point component isn't known yet, let's draw a line instead - as some kind of visual feedback...
                     line = new QGraphicsLineItem(QLineF(startComponent->mapToScene(startPoint), startComponent->mapToScene(startPoint)));
                     line->setPen(QPen(Qt::red, 2));
-                    addItem(line);
+                    //addItem(line);
                     // we would need to instantiate a "partial" wire - the start point is known
 
                 }
             }
         }
         else {
+            qDebug() << "line != 0";
+            QGraphicsLineItem *newLine = new QGraphicsLineItem(QLineF(line->line().p1(), mouseEvent->scenePos()));
+            newLine->setPen(QPen(Qt::red, 2));
+            addItem(newLine);
+
             if(mouseEvent->button()==Qt::LeftButton) {
-                QGraphicsLineItem *newLine = new QGraphicsLineItem(QLineF(line->line().p1(), mouseEvent->scenePos()));
-                newLine->setPen(QPen(Qt::red, 2));
-                addItem(newLine);
                 //here we add additional points to the "partial" wire...
             }
             if(mouseEvent->button()==Qt::RightButton) {
@@ -200,7 +203,7 @@ void MyScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent) {
             }
         }
     }
-*/
+
     if(mode == 1) {
         if(line != 0) {
             line = new QGraphicsLineItem(QLineF(mouseEvent->scenePos(), mouseEvent->scenePos()));
@@ -208,6 +211,6 @@ void MyScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent) {
             addItem(line);
         }
     }
-
+*/
     QGraphicsScene::mouseReleaseEvent(mouseEvent);
 }
