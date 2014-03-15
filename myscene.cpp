@@ -138,11 +138,11 @@ void MyScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {
                     // Since the end point component isn't known yet, let's draw a line instead - as some kind of visual feedback...
                     line = new QGraphicsLineItem(QLineF(startComponent->mapToScene(startPoint), startComponent->mapToScene(startPoint)));
                     line->setPen(QPen(Qt::red, 2));
-                    addItem(line);
+                    //addItem(line);
                     captureMode = false;
                     // we instantiate a "partial" wire - the start point is known
                     w = new Wire(startComponent, startComponent->getNodes().indexOf(startPoint));
-                    // we expect the partial wire to be able to draw itself - but appearantly there is some problem...
+                    // we expect the partial wire to be able to draw itself
                     addItem(w);
                 }
             }
@@ -154,7 +154,7 @@ void MyScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {
             if(mouseEvent->button() == Qt::LeftButton) {
                 line = new QGraphicsLineItem(QLineF(line->line().p2(), mouseEvent->scenePos()));
                 line->setPen(QPen(Qt::red, 2));
-                addItem(line);
+                //addItem(line);
                 // add point to wire & redraw wire
                 w->addSegment(mouseEvent->scenePos());
                 w->update();
@@ -172,7 +172,7 @@ void MyScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {
                         // Since the end point component isn't known yet, let's draw a line instead - as some kind of visual feedback...
                         line = new QGraphicsLineItem(QLineF(line->line().p2(), endComponent->mapToScene(endPoint)));
                         line->setPen(QPen(Qt::red, 2));
-                        addItem(line);
+                        //addItem(line);
                         captureMode = true;
                         // finalize "partial" wire
                         w->finalizeWire(endComponent, endComponent->getNodes().indexOf(endPoint));
@@ -190,7 +190,6 @@ void MyScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {
 }
 
 void MyScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent) {
-
     QGraphicsScene::mouseMoveEvent(mouseEvent);
 }
 
