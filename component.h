@@ -34,7 +34,7 @@ public:
     QString getName();
     QVector<Wire*> getWires(int);
     QVector<QPointF> getNodes();
-    QPointF getNearestPort(QPointF);
+    int getNearestPort(QPointF);
     int getNumNodes();
 
 

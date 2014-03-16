@@ -31,8 +31,6 @@ protected:
 
 
 private:
-    // a "temporary" line to connect the startComponent with the curent mouse position while drawing a wire
-    QGraphicsLineItem *line;
     int mode;
     QString itemtype;
     int numComponents;
