@@ -15,6 +15,7 @@ Wire::Wire(Component *c1, int n1, Component *c2, int n2) {
 }
 
 Wire::Wire(Component *c1, int n1) {
+    setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemSendsGeometryChanges);
     Component1 = c1;
     node1 = n1;
 
@@ -53,18 +54,36 @@ void Wire::addSegment(QPointF p) {
 QRectF Wire::boundingRect() const {
 
     /*
-    This is also a bit more complicated - we need to go over all segment points the wire consists (including the start- & endpoints)
+    Go over all segment points the wire consists (including the start- & endpoints)
     and find the min & max x & y values => this gives the bounding box...
     */
-/*
-    qreal deltaX = qAbs(mapFromItem(Component1, Component1->getNodes().at(node1)).x() - mapFromItem(Component2, Component2->getNodes().at(node2)).x());
-    qreal deltaY = qAbs(mapFromItem(Component1, Component1->getNodes().at(node1)).y() - mapFromItem(Component2, Component2->getNodes().at(node2)).y());
 
-    qreal posX = qMin(mapFromItem(Component1, Component1->getNodes().at(node1)).x(), mapFromItem(Component2, Component2->getNodes().at(node2)).x());
-    qreal posY = qMin(mapFromItem(Component1, Component1->getNodes().at(node1)).y(), mapFromItem(Component2, Component2->getNodes().at(node2)).y());
-*/
-    //return QRectF(posX-1, posY-1, deltaX+2, deltaY+2);
-    return QRectF(0, 0, 5000, 5000);
+    // start with Component1
+    qreal minX = mapFromItem(Component1, Component1->getNodes().at(node1)).x();
+    qreal minY = mapFromItem(Component1, Component1->getNodes().at(node1)).y();
+    qreal maxX = minX;
+    qreal maxY = minY;
+
+
+    for(int i=0; i<points.size(); i++) {
+        minX = qMin(minX, points.at(i).x());
+        minY = qMin(minY, points.at(i).y());
+        maxX = qMax(maxX, points.at(i).x());
+        maxY = qMax(maxY, points.at(i).y());
+    }
+
+    // when there is a second component connected, consider it in the min / max games as well...
+    if(Component2 != 0) {
+        // the minimum x / y values of the 2 components
+        minX = qMin(minX, mapFromItem(Component2, Component2->getNodes().at(node2)).x());
+        minY = qMin(minY, mapFromItem(Component2, Component2->getNodes().at(node2)).y());
+
+        // the maximum x / y values of the 2 components
+        maxX = qMax(maxX, mapFromItem(Component2, Component2->getNodes().at(node2)).x());
+        maxY = qMax(maxY, mapFromItem(Component2, Component2->getNodes().at(node2)).y());
+    }
+
+    return QRectF(minX-2, minY-2, maxX-minX+4, maxY-minY+4);
 }
 
 

@@ -20,7 +20,7 @@ void MyScene::setDrawingItem(QString itemtype) {
 
 void MyScene::NameWire(Component *c, int n) {
 
-    // get the wires ffrom the component's node
+    // get the wires from the component's node
     QVector<Wire*> wires = c->getWires(n);
     foreach(Wire* w, wires) {
         if(w->getName() == -1) {
@@ -187,6 +187,32 @@ void MyScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {
     if(mode == 0) {
         QGraphicsScene::mousePressEvent(mouseEvent);
     }
+
+    // delete
+    if(mode == 3) {
+        qDebug() << "remove";
+        QList<QGraphicsItem*> items = this->selectedItems();
+
+        qDebug() << items;
+
+        Component *c = qgraphicsitem_cast<Component*>(items.last());
+        if(c != 0) {
+            components.removeAll(c);
+            this->removeItem(c);
+        }
+
+        Wire *w = qgraphicsitem_cast<Wire*>(items.last());
+        if(w != 0) {
+            // remove wire refernce in components
+            w->getComponent1()->removeWire(w->getNode1(), w);
+            w->getComponent2()->removeWire(w->getNode2(), w);
+            wires.removeAll(w);
+            this->removeItem(w);
+        }
+
+        QGraphicsScene::mousePressEvent(mouseEvent);
+    }
+
 }
 
 void MyScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent) {

@@ -30,22 +30,27 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     QActionGroup *toolActions = new QActionGroup(this);
     toolActions->setExclusive(true);
 
-    QAction *lineAction = new QAction("Line", this);
+    QAction *wireAction = new QAction("Wire", this);
     QAction *selectAction = new QAction("Select", this);
-    QAction *itemAction = new QAction("Place Item", this);
-    lineAction->setActionGroup(toolActions);
-    lineAction->setCheckable(true);
+    QAction *itemAction = new QAction("Place Component", this);
+    QAction *delItemAction = new QAction("Delete Item", this);
+    wireAction->setActionGroup(toolActions);
+    wireAction->setCheckable(true);
     selectAction->setActionGroup(toolActions);
     selectAction->setCheckable(true);
     itemAction->setActionGroup(toolActions);
     itemAction->setCheckable(true);
+    delItemAction->setActionGroup(toolActions);
+    delItemAction->setCheckable(true);
+
 
     QAction *exportAction = new QAction("Export", this);
 
     QToolBar *toolBar = new QToolBar("Actions", this);
-    toolBar->addAction(lineAction);
+    toolBar->addAction(wireAction);
     toolBar->addAction(selectAction);
     toolBar->addAction(itemAction);
+    toolBar->addAction(delItemAction);
     toolBar->addAction(exportAction);
     this->addToolBar(toolBar);
 
@@ -68,11 +73,11 @@ void MainWindow::toolActionsSlot(QAction *a) {
         scene->setMode(0);
     }
 
-    if(a->text() == "Line") {
+    if(a->text() == "Wire") {
         scene->setMode(1);
     }
 
-    if(a->text() == "Place Item") {
+    if(a->text() == "Place Component") {
         scene->setMode(2);
         //initialization for "Place Item"
         int selected = itemList->currentRow();
@@ -85,6 +90,10 @@ void MainWindow::toolActionsSlot(QAction *a) {
         if(selected == 2) {
             scene->setDrawingItem("Ground");
         }
+    }
+
+    if(a->text() == "Delete Item") {
+        scene->setMode(3);
     }
 
 }

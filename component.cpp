@@ -32,6 +32,15 @@ void Component::addWire(int node, Wire *e) {
     _wires[node].append(e);
 }
 
+void Component::removeWire(int node, Wire *e) {
+    for(int i=0; i<_wires[node].size(); i++) {
+        if(_wires[node].at(i) == e) {
+            _wires[node].remove(i);
+        }
+    }
+}
+
+
 QString Component::getName() {
     return _name;
 }
@@ -52,7 +61,7 @@ QPointF Component::getNearestPort(QPointF s) {
     QPointF startPoint = this->mapFromScene(s);
     // the maximum a click can be off is the diagonal of the bounding box
     QRectF bb = this->boundingRect();
-    qreal dist = pow(bb.height(), 2) + pow(bb.width(), 2);
+    qreal dist = (pow(bb.height(), 2) + pow(bb.width(), 2))/2;
     for(int i=0; i<_nodes.size(); i++) {
         QPointF temp = _nodes.at(i);
         qreal temp_dist = pow((temp - startPoint).x(), 2) + pow((temp - startPoint).y(), 2);
@@ -68,13 +77,24 @@ QPointF Component::getNearestPort(QPointF s) {
 
 QVariant Component::itemChange(GraphicsItemChange change, const QVariant & value) {
     if(change == ItemPositionHasChanged || change==QGraphicsItem::ItemPositionChange) {
-        qDebug() << "itemchange";
+
+        QPointF newPos = value.toPointF();
+        int tx = (int) newPos.x();
+        tx = tx / 20;
+        newPos.setX(20 * tx);
+        int ty = (int) newPos.y();
+        ty = ty / 20;
+        newPos.setY(20 * ty);
+
         for(int i=0; i<Component::NUM_NODES; i++) {
             foreach(Wire *edge, _wires[i]) {
                 qDebug() << "adjust";
                 edge->adjust();
             }
         }
+
+        return newPos;
+
     }
 
     return QGraphicsItem::itemChange(change, value);

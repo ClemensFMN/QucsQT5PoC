@@ -30,6 +30,7 @@ public:
     QRectF boundingRect() const;
     void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
     void addWire(int, Wire *e);
+    void removeWire(int, Wire *e);
     QString getName();
     QVector<Wire*> getWires(int);
     QVector<QPointF> getNodes();
