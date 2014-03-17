@@ -16,17 +16,23 @@ void MyScene::setDrawingItem(QString itemtype) {
     this->itemtype = itemtype;
 }
 
-
+/*!
+* \brief MyScene::NameWire assigns a netID to a component's port (and all subsequently connected wires)
+* \param c the component, n the port to which the global variable netNum shall be assigned as netID
+* Starts with all wires leaving the component's port and assigns all (electrically) connected wires
+* the value netNum.
+*/
 void MyScene::NameWire(Component *c, int n) {
 
-    // get the wires from the component's node
+    // get the wires from the component's port
     QVector<Wire*> wires = c->getWires(n);
     foreach(Wire* w, wires) {
         if(w->getName() == -1) {
-            // if we haven't assigned it an id do it now
+            // haven't assigned an id to the wire yet
             w->setName(netNum);
             Component *nextComponent;
             int nextNode;
+            // obtain the component at the other side of the wire
             if(w->getComponent1() == c) {
                 nextComponent = w->getComponent2();
                 nextNode = w->getNode2();
@@ -35,7 +41,7 @@ void MyScene::NameWire(Component *c, int n) {
                 nextComponent = w->getComponent1();
                 nextNode = w->getNode1();
             }
-            // after we have obtained the next component's node, we start all over again
+            // recursively start naming wires from the component at the other side
             NameWire(nextComponent, nextNode);
         }
         // already visited this node -> continue
@@ -43,6 +49,10 @@ void MyScene::NameWire(Component *c, int n) {
 
 }
 
+/*!
+* \brief MyScene::exportScene exports a scene in the qucs netlist format (the properties are still missing)
+* Triggered by the GUI, exports the netlist
+*/
 void MyScene::exportScene() {
 
     // this cleans out any netlist names we may have assigned to the wires so far
@@ -52,7 +62,7 @@ void MyScene::exportScene() {
 
     // all wires connected with ground get id = 0
     netNum = 0;
-    // let's go over all components and if it's a gnd component, assign net id 0 to all connected wires
+    // go over all components and if it's a gnd component, assign netID 0 to all connected wires
     foreach(Component* c, components) {
         if(c->getName() == "GND") {
             NameWire(c, 0);
@@ -63,7 +73,7 @@ void MyScene::exportScene() {
     // the first net becomes the id 1
     netNum = 1;
 
-    // go over all wires, check if they have already gotten a name; if not, start a depth-first search & assign an id
+    // go over all wires, check if they have already gotten a name; if not, trigger assignment on both sides of the wire
     foreach(Wire* w, wires) {
         if(w->getName() == -1) {
             // start traversal for one side of the wire
@@ -74,6 +84,7 @@ void MyScene::exportScene() {
         }
     }
 
+    // iterate over all components & write the netlist to the console
     qDebug() << "Export Netlist";
     for(int i=0; i<components.size(); i++) {
         Component *c = components[i];
