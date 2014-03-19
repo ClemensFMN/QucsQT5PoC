@@ -6,6 +6,11 @@ Component::Component(QString name) {
     setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemSendsGeometryChanges);
 }
 
+int Component::type() const {
+    return UserType + 2;
+}
+
+
 QRectF Component::boundingRect() const {
     return QRectF(0, 0, 0, 0);
 }

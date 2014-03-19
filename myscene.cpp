@@ -188,17 +188,17 @@ void MyScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {
 
     // delete
     if(mode == 3) {
-        qDebug() << "remove";
-        QList<QGraphicsItem*> items = this->selectedItems();
 
-        qDebug() << items;
+        // find all items @ pos of mouse click
+        QList<QGraphicsItem*> items = this->items(mouseEvent->scenePos());
 
         if(items.size() != 0) {
 
             // assume that there is only one component selected => last is enough
-            //TODO something is broken...
+            // TODO The docs say that type must be implemented for the cast to work, but somehow it needs the
+            // comparison with type as well -> not nice :-(
             Component *c = qgraphicsitem_cast<Component*>(items.last());
-            if(c != 0) {
+            if(c != 0 & c->type() == QGraphicsItem::UserType+2) {
                 // remove the component both from the components array
                 components.removeAll(c);
                 // and from the scene
@@ -207,7 +207,7 @@ void MyScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {
 
             Wire *w = qgraphicsitem_cast<Wire*>(items.last());
             // in case a wire shall be removed, things are a bit trickier
-            if(w != 0) {
+            if(w != 0 & w->type() == QGraphicsItem::UserType+1) {
                 // delete the refernece in the component to the wire
                 w->getComponent1()->removeWire(w->getNode1(), w);
                 w->getComponent2()->removeWire(w->getNode2(), w);

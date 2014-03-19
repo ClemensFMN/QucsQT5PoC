@@ -55,6 +55,11 @@ void Wire::finalizeWire(Component *c2, int n2) {
 
 }
 
+int Wire::type() const {
+    return UserType + 1;
+}
+
+
 void Wire::addSegment(QPointF p) {
     points.append(p);
     qDebug() << "add segment";

@@ -36,6 +36,7 @@ public:
     QVector<QPointF> getNodes();
     int getNearestPort(QPointF);
     int getNumNodes();
+    int type() const;
 
 
 protected:

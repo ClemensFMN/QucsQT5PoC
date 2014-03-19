@@ -23,6 +23,7 @@ public:
     int getNode2();
     void finalizeWire(Component *, int);
     void addSegment(QPointF);
+    int type() const;
 
 private:
     // the components the wire connects
